@@ -9,28 +9,30 @@ namespace Fibonacci.First;
 public class CountController : ControllerBase
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly ICountService _service;
+    private readonly ICountService _countService;
     private readonly ServiceOptions _serviceOptions;
 
     public CountController(IHttpClientFactory httpClientFactory,
-        ICountService service,
+        ICountService countService,
         IOptions<ServiceOptions> serviceOptions)
     {
         _httpClientFactory = httpClientFactory;
-        _service = service;
+        _countService = countService;
         _serviceOptions = serviceOptions.Value;
     }
 
     [HttpPost("{numberOfThreads:int}")]
-    public IActionResult InitCount([FromRoute] int numberOfThreads = 1)
+    public async Task<IActionResult> InitCount([FromRoute] int numberOfThreads = 1)
     {
-        Parallel.For(0, numberOfThreads, async i =>
+        List<CountDto> result = new(numberOfThreads);
+        Parallel.For(0, numberOfThreads, i =>
         {
-            var result = _service.Count(0, 1);
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri($"{_serviceOptions.Protocol}://{_serviceOptions.Host}:{_serviceOptions.Port}/");
-            await client.PostAsJsonAsync(_serviceOptions.Uri, result);
+            result.Add(_countService.Count(0, 1));
         });
+        
+        var client = _httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri($"{_serviceOptions.Protocol}://{_serviceOptions.Host}:{_serviceOptions.Port}/");
+        await client.PostAsJsonAsync(_serviceOptions.Uri, result);
         return Ok();
     }
 }

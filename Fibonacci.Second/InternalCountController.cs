@@ -20,9 +20,14 @@ public class InternalCountController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Count(CountDto dto)
+    public async Task<IActionResult> Count(List<CountDto> request)
     {
-        var result = _countService.Count(dto.PreviousNumber, dto.CurrentNumber);
+        List<CountDto> result = new(request.Count);
+        Parallel.ForEach(request, item =>
+        {
+            result.Add(_countService.Count(item.PreviousNumber, item.CurrentNumber));
+        });
+        
         using var bus = RabbitHutch.CreateBus($"host={_rabbitMqOptions.Host};port={_rabbitMqOptions.Port}");
         await bus.SendReceive.SendAsync(Queues.Count, result);
         return Ok();

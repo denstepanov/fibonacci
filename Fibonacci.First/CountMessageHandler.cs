@@ -26,20 +26,23 @@ public class CountMessageHandler : IHostedService
     
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await _bus.SendReceive.ReceiveAsync<CountDto>(Queues.Count, async message => await OnMessage(message));
+        await _bus.SendReceive.ReceiveAsync<List<CountDto>>(Queues.Count, async message =>
+        {
+            List<CountDto> result = new(message.Count);
+            Parallel.ForEach(message, item =>
+            {
+                result.Add(_countService.Count(item.PreviousNumber, item.CurrentNumber));
+            });
+            
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri($"{_serviceOptions.Protocol}://{_serviceOptions.Host}:{_serviceOptions.Port}/");
+            await client.PostAsJsonAsync(_serviceOptions.Uri, result);
+        });
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
         _bus.Dispose();
         return Task.CompletedTask;
-    }
-
-    private async Task OnMessage(CountDto dto)
-    {
-        var result = _countService.Count(dto.PreviousNumber, dto.CurrentNumber);
-        var client = _httpClientFactory.CreateClient();
-        client.BaseAddress = new Uri($"{_serviceOptions.Protocol}://{_serviceOptions.Host}:{_serviceOptions.Port}/");
-        await client.PostAsJsonAsync(_serviceOptions.Uri, result);
     }
 }
