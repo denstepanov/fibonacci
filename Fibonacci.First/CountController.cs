@@ -1,3 +1,4 @@
+using System.Numerics;
 using Fibonacci.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -26,10 +27,18 @@ public class CountController : ControllerBase
     {
         Parallel.For(0, numberOfThreads, async i =>
         {
-            var result = _service.Count(0, 1);
+            var result = _service.Count(
+                new BigInteger(0).ToByteArray(), 
+                new BigInteger(1).ToByteArray());
+            
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri($"{_serviceOptions.Protocol}://{_serviceOptions.Host}:{_serviceOptions.Port}/");
-            await client.PostAsJsonAsync(_serviceOptions.Uri, result);
+            var dto = new CountDto
+            {
+                PreviousNumber = result.Previous,
+                CurrentNumber = result.Current
+            };
+            await client.PostAsJsonAsync(_serviceOptions.Uri, dto);
         });
         return Ok();
     }

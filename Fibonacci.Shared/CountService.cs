@@ -1,3 +1,4 @@
+using System.Numerics;
 using Microsoft.Extensions.Logging;
 
 namespace Fibonacci.Shared;
@@ -12,15 +13,14 @@ public class CountService : ICountService
         _logger = logger;
     }
     
-    public CountDto Count(ulong previousNumber, ulong currentNumber)
+    public (byte[] Previous, byte[] Current) Count(byte[] previousNumber, byte[] currentNumber)
     {
-        var result = new CountDto
-        {
-            PreviousNumber = currentNumber,
-            CurrentNumber = previousNumber + currentNumber
-        };
-        
-        _logger.LogInformation($"{result.CurrentNumber}");
-        return result;
+        var prev = new BigInteger(previousNumber);
+        var curr = new BigInteger(currentNumber);
+        Console.WriteLine($"previousNumber: {prev.ToString()}, currentNumber: {curr.ToString()}");
+
+        var newCurrentNumber = BigInteger.Add(prev, curr);
+        _logger.LogInformation($"{newCurrentNumber}");
+        return (currentNumber, newCurrentNumber.ToByteArray());
     }
 }

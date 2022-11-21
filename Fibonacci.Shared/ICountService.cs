@@ -1,6 +1,8 @@
+using System.Numerics;
+
 namespace Fibonacci.Shared;
 
 public interface ICountService
 {
-    CountDto Count(ulong previousNumber, ulong currentNumber);
+    (byte[] Previous, byte[] Current) Count(byte[] previousNumber, byte[] currentNumber);
 }

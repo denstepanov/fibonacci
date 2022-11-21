@@ -1,7 +1,9 @@
+using System.Numerics;
+
 namespace Fibonacci.Shared;
 
 public class CountDto
 {
-    public ulong PreviousNumber { get; set; }
-    public ulong CurrentNumber { get; set; }
+    public byte[] PreviousNumber { get; set; }
+    public byte[] CurrentNumber { get; set; }
 }

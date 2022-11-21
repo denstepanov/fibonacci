@@ -40,6 +40,11 @@ public class CountMessageHandler : IHostedService
         var result = _countService.Count(dto.PreviousNumber, dto.CurrentNumber);
         var client = _httpClientFactory.CreateClient();
         client.BaseAddress = new Uri($"{_serviceOptions.Protocol}://{_serviceOptions.Host}:{_serviceOptions.Port}/");
-        await client.PostAsJsonAsync(_serviceOptions.Uri, result);
+        dto = new CountDto
+        {
+            PreviousNumber = result.Previous,
+            CurrentNumber = result.Current
+        };
+        await client.PostAsJsonAsync(_serviceOptions.Uri, dto);
     }
 }
