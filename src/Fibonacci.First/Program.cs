@@ -4,14 +4,11 @@ using Fibonacci.Shared;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var configuration = builder.Configuration;
 var webHost = builder.WebHost;
-webHost.ConfigureLogging(logging =>
-{
-    logging.ClearProviders();
-    logging.AddConsole();
-});
-
 webHost.ConfigureServices(services =>
 {
     services.AddControllers();

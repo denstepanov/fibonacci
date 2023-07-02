@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci.First", "Fibonacci.First\Fibonacci.First.csproj", "{7CF17F86-87C9-4CC2-BFCF-470D1AE1D56E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci.First", "src\Fibonacci.First\Fibonacci.First.csproj", "{7CF17F86-87C9-4CC2-BFCF-470D1AE1D56E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci.Second", "Fibonacci.Second\Fibonacci.Second.csproj", "{6242E54B-4B49-4449-8766-8E0F95D46F68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci.Second", "src\Fibonacci.Second\Fibonacci.Second.csproj", "{6242E54B-4B49-4449-8766-8E0F95D46F68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci.Shared", "Fibonacci.Shared\Fibonacci.Shared.csproj", "{D676F380-3E18-4842-816B-FAD4214C2466}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci.Shared", "src\Fibonacci.Shared\Fibonacci.Shared.csproj", "{D676F380-3E18-4842-816B-FAD4214C2466}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
