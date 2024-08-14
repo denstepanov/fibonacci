@@ -1,0 +1,16 @@
+﻿services:
+  fibonacci.first:
+    image: fibonacci.first
+    build:
+      context: .
+      dockerfile: src/Fibonacci.First/Dockerfile
+  fibonacci.second:
+    image: fibonacci.second
+    build:
+      context: .
+      dockerfile: src/Fibonacci.Second/Dockerfile
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    build:
+      context: .
+      
